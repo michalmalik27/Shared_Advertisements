@@ -4,10 +4,10 @@ const fs = require("fs");
 const app = express();
 app.use(express.json());
 
-const advertisements_url = "/advertisements";
+const advertisements_url = "/api/advertisements";
 const advertisements_file = "advertisements.json";
 
-const categories_url = "/categories";
+const categories_url = "/api/categories";
 const categories_file = "categories.json";
 
 const readFileData = (fileName, callback) => {
@@ -39,13 +39,14 @@ app.get(advertisements_url, (req, res) => {
 
     try {
         readFileData(advertisements_file, (dataArray) => {
-            const result = dataArray.filter(
-                (item) =>
-                    (!userId || item.createdByUserId === userId) &&
-                    (!search || item.title.includes(search) || p.description.includes(search)) &&
-                    (!category || p.category === category) &&
-                    (!updatedOn || p.updatedOn.getDate() === updatedOn.getDate())
-            );
+            const result = dataArray
+                .filter(
+                    (item) =>
+                        (!userId || item.createdByUserId === userId) &&
+                        (!search || item.title.includes(search) || p.description.includes(search)) &&
+                        (!category || item.category === category) &&
+                        (!updatedOn || item.updatedOn.getDate() === updatedOn.getDate())
+                ).map((item) => ({ ...item, createdByUserId: undefined }));
 
             return res.send(result);
         });
@@ -61,6 +62,7 @@ app.get(`${advertisements_url}/:id`, (req, res) => {
     try {
         readFileData(advertisements_file, (arrayData) => {
             const advertisement = arrayData.find((item) => item.id === +id);
+            delete advertisement.createdByUserId;
             return res.send(advertisement);
         });
     } catch (error) {
