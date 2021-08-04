@@ -10,7 +10,6 @@ const advertisements_file = "advertisements.json";
 const categories_url = "/categories";
 const categories_file = "categories.json";
 
-
 const readFileData = (fileName, callback) => {
     fs.readFile(fileName, "utf8", (err, data) => {
         const arrayData = JSON.parse(data);
