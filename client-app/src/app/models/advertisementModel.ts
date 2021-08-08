@@ -1,4 +1,4 @@
-export interface advertisementModel {
+export interface AdvertisementModel {
     id: number;
     title: string;
     description: string;

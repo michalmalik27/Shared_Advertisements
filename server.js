@@ -1,8 +1,10 @@
 const express = require("express");
 const fs = require("fs");
+var cors = require('cors')
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 const advertisements_url = "/api/advertisements";
 const advertisements_file = "advertisements.json";
@@ -35,15 +37,15 @@ app.get(categories_url, (req, res) => {
 
 app.get(advertisements_url, (req, res) => {
     const userId = req.get("userId");
-    const { search, category, updatedOn } = req.query;
+    const { search, category, updatedOn, isOwn } = req.query;
 
     try {
         readFileData(advertisements_file, (dataArray) => {
             const result = dataArray
                 .filter(
                     (item) =>
-                        (!userId || item.createdByUserId === userId) &&
-                        (!search || item.title.includes(search) || p.description.includes(search)) &&
+                        (isOwn !== 'true' || item.createdByUserId === userId) &&
+                        (!search || item.title.includes(search) || item.description.includes(search)) &&
                         (!category || item.category === category) &&
                         (!updatedOn || item.updatedOn.getDate() === updatedOn.getDate())
                 ).map((item) => ({ ...item, createdByUserId: undefined }));
@@ -62,8 +64,7 @@ app.get(`${advertisements_url}/:id`, (req, res) => {
     try {
         readFileData(advertisements_file, (arrayData) => {
             const advertisement = arrayData.find((item) => item.id === +id);
-            delete advertisement.createdByUserId;
-            return res.send(advertisement);
+            return res.send({ ...advertisement, createdByUserId: undefined });
         });
     } catch (error) {
         return res.status(500).send();
@@ -74,8 +75,9 @@ app.post(advertisements_url, (req, res) => {
     const userId = req.get("userId");
     const { title, description, category, image, createdByUserName } = req.body;
 
-    if (!userId || !title || !description || !category || !createdByUserName)
+    if (!userId || !title || !description || !category || !createdByUserName) {
         return res.status(500).send("Invalid model");
+    }
 
     try {
         readFileData(advertisements_file, (arrayData) => {
@@ -84,11 +86,12 @@ app.post(advertisements_url, (req, res) => {
                 id, title, description, category, image, createdByUserId: userId, createdByUserName, updatedOn: new Date().getTime()
             };
             writeFileData(advertisements_file, [...arrayData, newAdvertisement], (err) => {
-                return res.send(!!err ? "Failed" : "Success");
+                if (!err) return res.status(200).send(newAdvertisement);
+                else throw err;
             });
         });
     } catch (error) {
-        return res.status(500).res.send();
+        return res.status(500).send("An error occurred...");
     }
 });
 
@@ -114,12 +117,13 @@ app.put(`${advertisements_url}/:id`, (req, res) => {
             advertisementToUpdata.createdByUserName = createdByUserName || advertisementToUpdata.createdByUserName;
             advertisementToUpdata.updatedOn = new Date().getTime();
 
-            const updatedAdvertisements = arrayData.map(
-                (item) => item.id === +id ? advertisementToUpdata : item
-            );
+            // to keep file-data ordered by updated on
+            const updatedAdvertisements =
+                [...arrayData.filter((item) => item.id !== +id), advertisementToUpdata];
 
             writeFileData(advertisements_file, updatedAdvertisements, (err) => {
-                return res.status(!!err ? 500 : 200).send(!!err ? "Failed" : "Success");
+                if (!err) return res.status(200).send(advertisementToUpdata);
+                else throw err;
             });
         });
     } catch (error) {
@@ -144,7 +148,8 @@ app.delete(`${advertisements_url}/:id`, (req, res) => {
             const updatedAdvertisements = arrayData.filter((item) => item.id !== +id);
 
             writeFileData(advertisements_file, updatedAdvertisements, (err) => {
-                return res.status(!!err ? 500 : 200).send(!!err ? "Failed" : "Success");
+                if (!err) return res.status(200).send();
+                else throw err;
             });
         });
     } catch (error) {
