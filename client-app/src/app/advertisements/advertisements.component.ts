@@ -25,5 +25,5 @@ export class AdvertisementsComponent implements OnInit {
     //     (err) => {
     //       console.log(err.error);
     //     });
-    // }
   }
+}
