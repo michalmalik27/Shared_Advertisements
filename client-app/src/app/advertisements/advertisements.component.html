@@ -1,1 +1,10 @@
-<p>advertisements works!</p>
+<ui-action-state [actionState]="loadState">
+    <div class="container">
+        <button mat-button (click)="addAdvertisement()" mat-flat-button color="primary">
+            Add Advertisement
+        </button>
+        <div *ngFor='let advertisement of advertisements;'>
+            <advertisement-card [advertisement]="advertisement"></advertisement-card>
+        </div>
+    </div>
+</ui-action-state>

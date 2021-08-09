@@ -38,8 +38,9 @@ app.get(categories_url, (req, res) => {
 app.get(advertisements_url, (req, res) => {
     const userId = req.get("userId");
     const { search, category, updatedOn, isOwn } = req.query;
-
     try {
+        const _updatedOn = updatedOn ? new Date(updatedOn) : undefined;
+
         readFileData(advertisements_file, (dataArray) => {
             const result = dataArray
                 .filter(
@@ -47,7 +48,7 @@ app.get(advertisements_url, (req, res) => {
                         (isOwn !== 'true' || item.createdByUserId === userId) &&
                         (!search || item.title.includes(search) || item.description.includes(search)) &&
                         (!category || item.category === category) &&
-                        (!updatedOn || item.updatedOn.getDate() === updatedOn.getDate())
+                        /*TOFIX*/(!_updatedOn || new Date(item.updatedOn).setTime(_updatedOn.getTime()) === _updatedOn)
                 ).map((item) => ({ ...item, createdByUserId: undefined }));
 
             return res.send(result);
@@ -85,7 +86,7 @@ app.post(advertisements_url, (req, res) => {
             const newAdvertisement = {
                 id, title, description, category, image, createdByUserId: userId, createdByUserName, updatedOn: new Date().getTime()
             };
-            writeFileData(advertisements_file, [...arrayData, newAdvertisement], (err) => {
+            writeFileData(advertisements_file, [newAdvertisement, ...arrayData], (err) => {
                 if (!err) return res.status(200).send(newAdvertisement);
                 else throw err;
             });
@@ -119,7 +120,7 @@ app.put(`${advertisements_url}/:id`, (req, res) => {
 
             // to keep file-data ordered by updated on
             const updatedAdvertisements =
-                [...arrayData.filter((item) => item.id !== +id), advertisementToUpdata];
+                [advertisementToUpdata, ...arrayData.filter((item) => item.id !== +id)];
 
             writeFileData(advertisements_file, updatedAdvertisements, (err) => {
                 if (!err) return res.status(200).send(advertisementToUpdata);
