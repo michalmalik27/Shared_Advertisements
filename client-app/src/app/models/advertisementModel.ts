@@ -6,4 +6,5 @@ export interface AdvertisementModel {
     image: string;
     createdByUserName: string;
     updatedOn: Date;
+    isEditEnable: boolean;
 }

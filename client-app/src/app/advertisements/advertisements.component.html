@@ -1,10 +1,29 @@
-<ui-action-state [actionState]="loadState">
-    <div class="container">
+<ui-action-state [actionState]="loadCategoriesState">
+    <!-- <div fxFlex.md="25%" fxFlex.sm="33%" fxFlex.xs="100%">
+
+    </div> -->
+
+    <div fxFlex.md="25%" fxFlex.sm="33%" fxFlex.xs="100%">
         <button mat-button (click)="addAdvertisement()" mat-flat-button color="primary">
             Add Advertisement
         </button>
-        <div *ngFor='let advertisement of advertisements;'>
-            <advertisement-card [advertisement]="advertisement"></advertisement-card>
-        </div>
+        <mat-radio-group aria-label="Select an option">
+            <mat-radio-button value="false">All Posts</mat-radio-button>
+            <mat-radio-button value="true">My Posts</mat-radio-button>
+        </mat-radio-group>
+    </div>
+</ui-action-state>
+
+<ui-action-state [actionState]="loadAdvertisementState">
+    <div class="container">
+        <ngx-masonry #masonry [options]="{ gutter: 10 }" [ordered]="true">
+            <div fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="33%" fxFlex.xs="100%" ngxMasonryItem class="masonry-item"
+                *ngFor='let advertisement of advertisements;'>
+                <advertisement-card [advertisement]="advertisement"
+                    [categoryClass]="categories.get(advertisement.category)" (onUpdated)="onUpdated($event)"
+                    (onDeleted)="onDeleted($event)">
+                </advertisement-card>
+            </div>
+        </ngx-masonry>
     </div>
 </ui-action-state>

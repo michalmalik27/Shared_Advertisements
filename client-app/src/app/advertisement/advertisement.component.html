@@ -1,17 +1,24 @@
 <div class="content">
     <mat-card class="mat-elevation-z4">
         <mat-card-header>
-            <mat-card-subtitle><small>{{advertisement.category}}</small></mat-card-subtitle>
-            <mat-card-title>Himalayan Peaks</mat-card-title>
-            <mat-card-subtitle><i>By {{advertisement.createdByUserName}}</i></mat-card-subtitle>
+            <mat-card-subtitle>
+                <small [class]="categoryClass">{{advertisement.category}} </small>
+                <hr>
+            </mat-card-subtitle>
+            <mat-card-title>{{advertisement.title}}</mat-card-title>
+            <mat-card-subtitle>
+                <small>
+                    <i>By {{advertisement.createdByUserName}} | At {{advertisement.updatedOn |
+                        date:'medium'}}</i></small>
+            </mat-card-subtitle>
         </mat-card-header>
         <img *ngIf="!!advertisement.image" mat-card-image [src]="advertisement.image" alt="Image Of Advertisement">
         <mat-card-content>
             <p>{{advertisement.description}}</p>
         </mat-card-content>
-        <mat-card-actions>
-            <button mat-button mat-stroked-button color="primary">EDIT</button>
-            <button mat-button mat-stroked-button color="warn">REMOVE</button>
+        <mat-card-actions *ngIf="advertisement.isEditEnable">
+            <button mat-button mat-stroked-button color="primary" (click)="update()">EDIT</button>
+            <button mat-button mat-stroked-button color="warn" (click)="delete()">REMOVE</button>
         </mat-card-actions>
     </mat-card>
 </div>

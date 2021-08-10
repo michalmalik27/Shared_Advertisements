@@ -55,21 +55,21 @@ export class DataService {
     return this.http.get<AdvertisementModel>(`${this.baseUrl}/advertisement/${id}`)
   }
 
-  addAdvertisements(advertisement: AdvertisementModel): Observable<any> {
+  addAdvertisement(advertisement: AdvertisementModel): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}/advertisements`,
       advertisement,
       { headers: this.getHeaders() });
   }
 
-  updateAdvertisements(advertisement: AdvertisementModel): Observable<any> {
+  updateAdvertisement(advertisement: AdvertisementModel): Observable<any> {
     return this.http.put<any>(
       `${this.baseUrl}/advertisements`,
       advertisement,
       { headers: this.getHeaders() });
   }
 
-  deleteAdvertisements(advertisement: AdvertisementModel): Observable<any> {
+  deleteAdvertisement(advertisement: AdvertisementModel): Observable<any> {
     return this.http.delete<any>(
       `${this.baseUrl}/advertisements/${advertisement.id}`,
       { headers: this.getHeaders() });

@@ -49,7 +49,7 @@ app.get(advertisements_url, (req, res) => {
                         (!search || item.title.includes(search) || item.description.includes(search)) &&
                         (!category || item.category === category) &&
                         /*TOFIX*/(!_updatedOn || new Date(item.updatedOn).setTime(_updatedOn.getTime()) === _updatedOn)
-                ).map((item) => ({ ...item, createdByUserId: undefined }));
+                ).map((item) => ({ ...item, createdByUserId: undefined, isEditEnable: item.createdByUserId === userId }));
 
             return res.send(result);
         });
@@ -87,7 +87,7 @@ app.post(advertisements_url, (req, res) => {
                 id, title, description, category, image, createdByUserId: userId, createdByUserName, updatedOn: new Date().getTime()
             };
             writeFileData(advertisements_file, [newAdvertisement, ...arrayData], (err) => {
-                if (!err) return res.status(200).send(newAdvertisement);
+                if (!err) return res.status(200).send({ ...newAdvertisement, isEditEnable: true });
                 else throw err;
             });
         });
@@ -115,7 +115,7 @@ app.put(`${advertisements_url}/:id`, (req, res) => {
             advertisementToUpdata.description = description || advertisementToUpdata.description;
             advertisementToUpdata.category = category || advertisementToUpdata.category;
             advertisementToUpdata.image = image || advertisementToUpdata.image;
-            advertisementToUpdata.createdByUserName = createdByUserName || advertisementToUpdata.createdByUserName;
+            //advertisementToUpdata.createdByUserName = createdByUserName || advertisementToUpdata.createdByUserName;
             advertisementToUpdata.updatedOn = new Date().getTime();
 
             // to keep file-data ordered by updated on
@@ -123,7 +123,7 @@ app.put(`${advertisements_url}/:id`, (req, res) => {
                 [advertisementToUpdata, ...arrayData.filter((item) => item.id !== +id)];
 
             writeFileData(advertisements_file, updatedAdvertisements, (err) => {
-                if (!err) return res.status(200).send(advertisementToUpdata);
+                if (!err) return res.status(200).send({ ...advertisementToUpdata, isEditEnable: true });
                 else throw err;
             });
         });

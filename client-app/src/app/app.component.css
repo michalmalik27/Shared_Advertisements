@@ -1,12 +1,16 @@
 .header {
-  background: url("https://www.thestatesman.com/wp-content/uploads/2020/04/googl_ED.jpg")
-    repeat center;
-  background-size: cover;
-  color: rgb(10, 9, 9);
   text-align: center;
-  padding: 20px;
-  position: fixed;
+  position: sticky;
   top: 0;
-  width: 100%;
-  z-index: 100;
+  z-index: 1000;
+}
+
+.dialog-responsive {
+  width: 40%;
+}
+
+@media only screen and (max-width: 760px) {
+  .dialog-responsive {
+    width: 100%;
+  }
 }

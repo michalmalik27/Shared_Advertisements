@@ -2,6 +2,26 @@
   padding: 16px;
 }
 
-.content > mat-card {
-  width: 200px;
+.category_1 {
+  color: crimson;
+}
+
+.category_2 {
+  color: darkgreen;
+}
+
+.category_3 {
+  color: darkmagenta;
+}
+
+.category_4 {
+  color: sienna;
+}
+
+.category_5 {
+  color: blue;
+}
+
+.category_6 {
+  color: teal;
 }
