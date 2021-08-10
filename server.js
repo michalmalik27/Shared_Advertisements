@@ -28,6 +28,9 @@ const writeFileData = (fileName, arrayData, callback) => {
 app.get(categories_url, (req, res) => {
     try {
         readFileData(categories_file, (arrayData) => {
+            let orderedData = arrayData.sort(function (a, b) {
+                return a.localeCompare(b);
+            })
             return res.send(arrayData);
         })
     } catch (error) {
@@ -115,7 +118,7 @@ app.put(`${advertisements_url}/:id`, (req, res) => {
             advertisementToUpdata.description = description || advertisementToUpdata.description;
             advertisementToUpdata.category = category || advertisementToUpdata.category;
             advertisementToUpdata.image = image || advertisementToUpdata.image;
-            //advertisementToUpdata.createdByUserName = createdByUserName || advertisementToUpdata.createdByUserName;
+            advertisementToUpdata.createdByUserName = createdByUserName || advertisementToUpdata.createdByUserName;
             advertisementToUpdata.updatedOn = new Date().getTime();
 
             // to keep file-data ordered by updated on

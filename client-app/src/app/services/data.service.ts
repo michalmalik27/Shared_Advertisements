@@ -64,7 +64,7 @@ export class DataService {
 
   updateAdvertisement(advertisement: AdvertisementModel): Observable<any> {
     return this.http.put<any>(
-      `${this.baseUrl}/advertisements`,
+      `${this.baseUrl}/advertisements/${advertisement.id}`,
       advertisement,
       { headers: this.getHeaders() });
   }

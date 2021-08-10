@@ -16,6 +16,7 @@ export class AdvertisementsComponent implements OnInit {
   constructor(private dataService: DataService, private dialog: MatDialog) { }
   //@ViewChild('masonry') masonry!: NgxMasonryComponent;
 
+  searchModel: SearchAdvertisementsModel = {};
   loadAdvertisementState: ActionState = <ActionState>{
     action: ActionStates.INIT,
     message: ""
@@ -53,13 +54,7 @@ export class AdvertisementsComponent implements OnInit {
     this.loadAdvertisementState.action = ActionStates.IN_PROCESS;
     this.loadAdvertisementState.message = "Load Advertisements...";
 
-    let searchAdvertisementsModel = <SearchAdvertisementsModel>{
-      //category: 'Buy & Sell',
-      //isOwn: true,
-      //updatedOn: new Date(2021, 08, 08)
-    };
-
-    this.dataService.getAdvertisements(searchAdvertisementsModel).subscribe(
+    this.dataService.getAdvertisements(this.searchModel).subscribe(
       (data) => {
         this.advertisements = data;
         this.loadAdvertisementState.action = ActionStates.IS_COMPLETED;

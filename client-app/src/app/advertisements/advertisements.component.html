@@ -1,22 +1,32 @@
 <ui-action-state [actionState]="loadCategoriesState">
-    <!-- <div fxFlex.md="25%" fxFlex.sm="33%" fxFlex.xs="100%">
-
-    </div> -->
-
-    <div fxFlex.md="25%" fxFlex.sm="33%" fxFlex.xs="100%">
-        <button mat-button (click)="addAdvertisement()" mat-flat-button color="primary">
-            Add Advertisement
-        </button>
-        <mat-radio-group aria-label="Select an option">
-            <mat-radio-button value="false">All Posts</mat-radio-button>
-            <mat-radio-button value="true">My Posts</mat-radio-button>
-        </mat-radio-group>
+    <button mat-button (click)="addAdvertisement()" mat-flat-button color="primary">
+        Add Advertisement
+    </button>
+    <div flLayout="column" fxLayoutGap="7px" fxLayoutGap.xs="0px">
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="7px" fxLayoutGap.sm="0px">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Search</mat-label>
+                <input matInput type="text" [(ngModel)]="searchModel.search" (keyup)="loadAdvertisements()"> <button
+                    *ngIf="searchModel.search" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="searchModel.search = ''; loadAdvertisements()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Category</mat-label>
+                <mat-select matInput (selectionChange)="loadAdvertisements()" [(ngModel)]="searchModel.category">
+                    <mat-option [value]="null">All</mat-option>
+                    <mat-option *ngFor="let category of categories | keyvalue" [value]="category.key">{{
+                        category.key }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </div>
 </ui-action-state>
 
 <ui-action-state [actionState]="loadAdvertisementState">
-    <div class="container">
-        <ngx-masonry #masonry [options]="{ gutter: 10 }" [ordered]="true">
+    <div class="container content">
+        <ngx-masonry #masonry [options]="{ gutter: 10}" [ordered]="true">
             <div fxFlex.lg="20%" fxFlex.md="25%" fxFlex.sm="33%" fxFlex.xs="100%" ngxMasonryItem class="masonry-item"
                 *ngFor='let advertisement of advertisements;'>
                 <advertisement-card [advertisement]="advertisement"

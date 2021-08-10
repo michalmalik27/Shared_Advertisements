@@ -116,7 +116,6 @@ export class AdvertisementDialogComponent implements OnInit {
         this.dialogRef.close(this.data.action !== 'Delete' ? data : this.data.advertisement);
       },
       (err) => {
-        console.log(err);
         this.actionState.message = err.error;
         this.actionState.action = ActionStates.IS_FAILED;
       }
