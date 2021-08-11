@@ -51,7 +51,7 @@ app.get(advertisements_url, (req, res) => {
                         (isOwn !== 'true' || item.createdByUserId === userId) &&
                         (!search || item.title.includes(search) || item.description.includes(search)) &&
                         (!category || item.category === category) &&
-                        /*TOFIX*/(!_updatedOn || new Date(item.updatedOn).setTime(_updatedOn.getTime()) === _updatedOn)
+                        (!_updatedOn || new Date(item.updatedOn).setTime(_updatedOn.getTime()) === _updatedOn)
                 ).map((item) => ({ ...item, createdByUserId: undefined, isEditEnable: item.createdByUserId === userId }));
 
             return res.send(result);
