@@ -1,0 +1,64 @@
+<h1 mat-dialog-title>
+    <strong>{{ data.action }} Advertisement</strong>
+</h1>
+
+<div mat-dialog-content>
+    <div *ngIf="data.action !== 'Delete'; else elseTemplate">
+        <div class="example-container">
+            <div class="form-container">
+                <form [formGroup]="advertisementForm" (submit)="doAction()">
+                    <mat-form-field class="form-field">
+                        <mat-label>Title</mat-label>
+                        <input matInput formControlName="title" required />
+                        <mat-error *ngIf="showFormControlError('title')">
+                            <span *ngIf="showFormControlErrorType('title', 'required')">Required</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="form-field">
+                        <mat-label>Category</mat-label>
+                        <mat-select matInput formControlName="category" required>
+                            <mat-option *ngFor="let category of categories" [value]="category">{{
+                                category }}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="showFormControlError('category')">
+                            <span *ngIf="showFormControlErrorType('category', 'required')">Required</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="form-field">
+                        <mat-label>Description</mat-label>
+                        <textarea rows="8" matInput formControlName="description" required></textarea>
+                        <mat-error *ngIf="showFormControlError('description')">
+                            <span *ngIf="showFormControlErrorType('description', 'required')">Required</span>
+                            <span *ngIf="showFormControlErrorType('description', 'maxlength')">Max 1000
+                                characters</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="form-field">
+                        <mat-label>Image Url</mat-label>
+                        <input matInput formControlName="image" />
+                    </mat-form-field>
+                    <mat-form-field class="form-field">
+                        <mat-label>You'r Name</mat-label>
+                        <input matInput formControlName="createdByUserName" required />
+                        <mat-error *ngIf="showFormControlError('createdByUserName')">
+                            <span *ngIf="showFormControlErrorType('createdByUserName', 'required')">Required</span>
+                            <span *ngIf="showFormControlErrorType('createdByUserName', 'maxlength')">Max 50
+                                characters</span>
+                        </mat-error>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+    </div>
+    <ng-template #elseTemplate>
+        Sure to delete you`r advertisement
+        <b>{{ data.advertisement?.title }}</b>?
+    </ng-template>
+    <ui-action-state [actionState]="actionState"></ui-action-state>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="doAction()">{{ data.action }}</button>
+    <button mat-button (click)="closeDialog()" mat-flat-button color="warn">
+        Cancel
+    </button>
+</div>
