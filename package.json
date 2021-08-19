@@ -1,23 +1,24 @@
 {
-  "name": "IAITask",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "concurrently": "^6.2.0",
-    "nodemon": "^2.0.12"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "dev": "concurrently \"nodemon server.js\" \"cd client-app && npm start\""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "IAITask",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"uuid": "^8.3.2"
+	},
+	"devDependencies": {
+		"concurrently": "^6.2.0",
+		"nodemon": "^2.0.12"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon server.js",
+		"dev": "concurrently \"nodemon server.js\" \"cd client-app && npm start\"",
+		"dev-vue": "concurrently \"nodemon server.js\" \"cd client-vue3 && npm run serve\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
